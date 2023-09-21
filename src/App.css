@@ -1,5 +1,20 @@
 .App {
   text-align: center;
+  display: flex;
+  text-wrap: wrap;
+}
+@media (min-width: 576px) {
+  .AppSync {
+    -ms-flex: 0 0 83.333333%;
+    flex: 0 0 83.333333%;
+    max-width: 83.333333%;
+  }
+}
+.AppSync {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
 }
 
 .App-logo {
@@ -35,4 +50,23 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 0.5rem;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.2;
+  color: inherit;
 }
