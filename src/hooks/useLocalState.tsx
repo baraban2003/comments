@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export default function useLocalState(key: string, initial: {}) {
+export default function useLocalState(key: string, initial: []) {
   const [value, setValue] = useState(() => {
     if (typeof window !== undefined && window.localStorage) {
       const saved = window.localStorage.getItem(key);
@@ -13,6 +13,8 @@ export default function useLocalState(key: string, initial: {}) {
 
   useEffect(() => {
     if (window.localStorage) {
+      setValue(value);
+
       window.localStorage.setItem(key, JSON.stringify(value));
     }
   }, [value]);

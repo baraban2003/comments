@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { Key, useState } from 'react';
 import { customAlphabet } from 'nanoid';
 import s from './ItemList.module.css';
 import useLocalState from '../../hooks';
+import Item from '../Item/Item';
 
 export default function ItemList() {
-  const [item, setItem] = useLocalState('items', []);
+  const [items, setItems] = useLocalState('items', []);
+
   const [name, setName] = useState('');
   const nanoid = customAlphabet('1234567890', 8);
   const id = nanoid();
@@ -15,26 +17,24 @@ export default function ItemList() {
 
   const handleSubmit = (event: { target: any; preventDefault: () => void }) => {
     event.preventDefault();
-    const names = event.target[0].value;
-    const comments: never[] = [];
-    let mergedData;
-    if (item) {
-      mergedData = { ...item, ...[{ id, name, comments }] };
-    } else {
-      mergedData = [{ id, name, comments }];
-    }
 
-    setItem(mergedData);
+    setItems([...items, ...[{ id, name, comments: [] }]]);
 
     setName('');
+  };
+
+  const deleteEl = (elem: any) => {
+    const deleted = items.filter((e: { id: any }) => e.id !== elem);
+    setItems(deleted);
   };
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <div className={s.searchForm}>
-          <h2>Name</h2>
+          <h2>Items</h2>
           <input
+            placeholder="Type name here..."
             className={s.name}
             type="text"
             name="name"
@@ -49,6 +49,26 @@ export default function ItemList() {
           </button>
         </div>
       </form>
+      <ul>
+        {items.map(
+          (e: {
+            comments: any;
+            d: Key | null | undefined;
+            id: string;
+            name: string;
+          }) => {
+            return (
+              <Item
+                key={e.id}
+                id={e.id}
+                itemName={e.name}
+                deleteEl={deleteEl}
+                comentsCalc={e.comments.length}
+              />
+            );
+          }
+        )}
+      </ul>
     </div>
   );
 }
