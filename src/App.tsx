@@ -1,6 +1,7 @@
 import './App.css';
 import SideBar from './components/Sidebar';
 import ItemList from './components/ItemList';
+import CommentsList from './components/CommentsList';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       />
       <div className="AppSync">
         <ItemList />
+        <CommentsList />
       </div>
     </div>
   );

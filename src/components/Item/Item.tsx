@@ -6,13 +6,20 @@ type Props = {
   deleteEl: Function;
   id: string;
   comentsCalc: number;
+  active: any;
 };
 
-export default function Item({ itemName, deleteEl, id, comentsCalc }: Props) {
+export default function Item({
+  itemName,
+  deleteEl,
+  id,
+  comentsCalc,
+  active,
+}: Props) {
   return (
-    <li className={s.item}>
+    <li className={s.item} id={id} onClick={e => active(e)}>
       {itemName}
-      <span>{comentsCalc}</span>
+      <span className={s.commentsNumber}>{comentsCalc}</span>
       <button
         type="button"
         className={s.deleteBtn}
