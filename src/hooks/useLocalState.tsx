@@ -36,7 +36,7 @@ export default function useLocalState(key: string, initial: any) {
 
   // Вызываем функцию обновления периодически, чтобы следить за изменениями в локальном хранилище
   useEffect(() => {
-    const interval = setInterval(updateStoredValue, 1000); // Пример: каждую секунду
+    const interval = setInterval(updateStoredValue, 1000);
     return () => clearInterval(interval);
   }, []);
 

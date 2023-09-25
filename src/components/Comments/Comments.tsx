@@ -3,8 +3,6 @@ import s from './Comments.module.css';
 
 type Props = {
   commentName: string;
-
-  //id: string;
   color: string;
 };
 

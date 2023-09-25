@@ -1,8 +1,14 @@
-import { Key, useEffect, useState } from 'react';
+import { Key, useState, MouseEvent } from 'react';
 import { customAlphabet } from 'nanoid';
 import s from './ItemList.module.css';
 import useLocalState from '../../hooks';
 import Item from '../Item/Item';
+
+interface ItemData {
+  id: string;
+  name: string;
+  comments: any[];
+}
 
 export default function ItemList() {
   const [items, setItems] = useLocalState('items', []);
@@ -13,26 +19,33 @@ export default function ItemList() {
   const nanoid = customAlphabet('1234567890', 8);
   const id = nanoid();
 
-  const handleChange = (event: { target: any }) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
 
-  const handleSubmit = (event: { target: any; preventDefault: () => void }) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setItems([...items, ...[{ id, name, comments: [] }]]);
+    const newItem = { id, name, comments: [] };
+    setItems([...items, ...[newItem]]);
 
+    setActiveItem([newItem]);
     setName('');
   };
 
-  const deleteEl = (elem: any) => {
-    const deleted = items.filter((e: { id: any }) => e.id !== elem);
-    setItems(deleted);
+  const activate = (event: MouseEvent<HTMLDivElement>) => {
+    const activeId = event.currentTarget.id;
+    const active = items.filter((e: ItemData) => e.id === activeId);
+    setActiveItem(active);
   };
 
-  const activate = (event: any) => {
-    const active = items.filter((e: { id: any }) => e.id == event.target.id);
-    setActiveItem(active);
+  const deleteEl = (elemId: number) => {
+    const deleted = items.filter((e: { id: number }) => e.id !== elemId);
+    setItems(deleted);
+
+    setTimeout(() => {
+      setActiveItem([items[0]]);
+    }, 1);
   };
 
   return (
@@ -57,30 +70,35 @@ export default function ItemList() {
           </button>
         </div>
       </form>
-      <ul className={s.listGroup}>
-        {items.map(
-          (e: {
-            comments: any;
-            d: Key | null | undefined;
-            id: string;
-            name: string;
-          }) => {
-            const isActive = activeItem?.[0]?.id === e.id;
-            return (
-              <div className={isActive ? s.picker : ''}>
-                <Item
-                  key={e.id}
-                  id={e.id}
-                  itemName={e.name}
-                  deleteEl={deleteEl}
-                  comentsCalc={e.comments.length}
-                  active={activate}
-                />
-              </div>
-            );
-          }
-        )}
-      </ul>
+      {
+        <ul className={s.listGroup}>
+          {items.map(
+            (
+              e: {
+                comments: any;
+                d: Key | null | undefined;
+                id: string;
+                name: string;
+              },
+              index: string
+            ) => {
+              const isActive = activeItem?.[0]?.id === e.id;
+              return (
+                <div className={isActive ? s.picker : ''} key={e.id + index}>
+                  <Item
+                    key={e.id}
+                    id={e.id}
+                    itemName={e.name}
+                    deleteEl={deleteEl}
+                    comentsCalc={e.comments.length}
+                    active={activate}
+                  />
+                </div>
+              );
+            }
+          )}
+        </ul>
+      }
     </div>
   );
 }
